@@ -1,24 +1,49 @@
-document.getElementById('registrationForm').addEventListener('submit', function (event) {
+let user_det=document.getElementById("UserDetails");
+const retent=()=> {
+    let ent= localStorage.getItem("User-details");
+    if(ent){
+        ent=JSON.parse(ent);
+    }
+    else{
+        ent=[];
+    }
+    return ent;
+}
+let userDet=retent();
+const dispent=()=> {
+    const ent=retent();
+    let tableEntries = '';
+    for (const entry of ent) {
+        const nc = `<td>${entry.name}</td>`;
+        const ec= `<td>${entry.email}</td>`;
+        const pc= `<td>${entry.password}</td>`;
+        const dc = `<td>${entry.dob}</td>`;
+        const ac= `<td>${entry.acceptTerms ? 'true' : 'false'}</td>`;
+      
+        const row = `<tr>${nc}${ec}${pc}${dc}${ac}</tr>`;
+        tableEntries += row;
+      }
+    const table = `<table><tr><th>Name</th><th>Email</th><th>Password</th><th>Dob</th><th>Accepted terms?</th></tr>${tableEntries}</table>`;
+    let details= document.getElementById("User-details");
+    details.innerHTML=table;
+} 
+const SaveDet=(event)=>{
     event.preventDefault();
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const dob = document.getElementById('dob').value;
-    const table = document.getElementById('Table');
-    const nR = table.insertRow(-1);
-    const nC = nR.insertCell(0);
-    const eC = nR.insertCell(1);
-    const pC = nR.insertCell(2);
-    const dC = nR.insertCell(3);
-    const ac=nR.insertCell(4);
-    nC.innerHTML = name;
-    eC.innerHTML = email;
-    pC.innerHTML = password;
-    dC.innerHTML = dob;
-    ac.innerHTML="true";
-    document.getElementById('name').value = '';
-    document.getElementById('email').value = '';
-    document.getElementById('password').value = '';
-    document.getElementById('dob').value = '';
-    table.style.display = 'table';
-  });
+    const name=document.getElementById("name").value;
+    const email=document.getElementById("email").value;
+    const password=document.getElementById("password").value;
+    const dob=document.getElementById("dob").value;
+    const acceptTerms=document.getElementById("acceptTerms").value;
+const entry={
+    name,
+    email,
+    password,
+    dob,
+    acceptTerms
+};
+userDet.push(entry);
+localStorage.setItem("User-details",JSON.stringify(userDet));
+dispent();
+}
+user_det.addEventListener("submit",SaveDet);
+dispent();
